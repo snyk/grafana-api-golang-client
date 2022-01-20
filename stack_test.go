@@ -1,6 +1,7 @@
 package gapi
 
 import (
+	"os"
 	"testing"
 )
 
@@ -203,4 +204,18 @@ func TestDeleteStack(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error - Actual: %s, Expected: nil", err.Error())
 	}
+}
+
+func getClient(t *testing.T) *Client {
+
+	apiKey, exists := os.LookupEnv("APIKey")
+	if !exists {
+		t.Fatal("APIKey not found in environment")
+	}
+	client, err := New("https://grafana.com", Config{APIKey: apiKey})
+	if err != nil {
+		t.Fatalf("expected error to be nil; got: %s", err.Error())
+	}
+
+	return client
 }
